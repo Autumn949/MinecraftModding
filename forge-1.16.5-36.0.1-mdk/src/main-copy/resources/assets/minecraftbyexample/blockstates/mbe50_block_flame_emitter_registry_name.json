@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "minecraftbyexample:block/mbe50_block_flame_emitter_model" }
+    }
+}

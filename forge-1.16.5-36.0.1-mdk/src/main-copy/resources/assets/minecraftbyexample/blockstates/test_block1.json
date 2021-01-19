@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "normal": { "model": "minecraftbyexample:block/test_block1_model" }
+    }
+}

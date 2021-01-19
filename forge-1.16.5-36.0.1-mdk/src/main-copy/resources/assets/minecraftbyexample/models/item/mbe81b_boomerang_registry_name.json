@@ -1,0 +1,21 @@
+{
+  "loader": "forge:obj",
+  "model" : "minecraftbyexample:models/entity/mbe81b_boomerang.obj",
+  "flip-v": true,
+  "detectCullableFaces": false,
+  "diffuseLighting": true,
+  "ambientToFullbright": false,
+  "materialLibraryOverride": "minecraftbyexample:models/entity/mbe81b_boomerang.mtl",
+  "__comment": "flip-v may be required if your texture appears mirrored.  See OBJloader::read() for other flags.  currently the available options are",
+  "__comment1": "detectCullableFaces (default true) = try to convert faces to Directional Quads (EAST, WEST, etc) instead of just general quads",
+  "__comment2": "diffuseLighting (default false) = attempt to apply the direction-dependent lighting as per vanilla blocks.  Currently does nothing.",
+  "__comment3": "flipV (default false) = mirror the texture sheet top-->bottom (if your textures appear upside-down)",
+  "__comment4": "ambientToFullbright (default true) = always render at maximum world illumination (combinedLight) regardless of the actual skylight or blocklight present",
+  "__comment5": "materialLibraryOverrideLocation (default null) = use this path/filename for the material library file .mtl",
+  "overrides": [
+    { "predicate": { "chargefraction": 0.000 }, "model": "minecraftbyexample:item/mbe81b_boomerang_charge_0" },
+    { "predicate": { "chargefraction": 0.001 }, "model": "minecraftbyexample:item/mbe81b_boomerang_charge_1" },
+    { "predicate": { "chargefraction": 0.333 }, "model": "minecraftbyexample:item/mbe81b_boomerang_charge_2" },
+    { "predicate": { "chargefraction": 0.666 }, "model": "minecraftbyexample:item/mbe81b_boomerang_charge_3" }
+  ]
+}

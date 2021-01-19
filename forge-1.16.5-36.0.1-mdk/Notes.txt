@@ -1,0 +1,286 @@
+Good link for info on obfuscation/deobfuscation:
+https://jamieswhiteshirt.github.io/resources/know-your-tools/
+
+
+
+Item chainsaw for repeating sound
+
+
+Capabilities
+https://www.minecraftforge.net/forum/topic/82977-115-best-way-to-store-custom-data/
+https://github.com/Choonster-Minecraft-Mods/TestMod3/blob/06fe521371b4532a0cd337401e69bf8ed93294d4/src/main/java/choonster/testmod3/capability/maxhealth/MaxHealthCapability.java#L54
+
+https://www.minecraftforge.net/forum/topic/83656-1152-creating-keyframe-animation-of-entity/
+
+New stuff:
+RenderType: solid, cutout mipped, etc
+RenderTypeLookup manually sets the render type for each block now
+
+2. In other places of reference I've looked at, such as GirafiStudios' Waddles mod (https://github.com/GirafiStudios/Waddles/blob/master/src/main/java/com/girafi/waddles/client/model/PenguinModel.java) and McJty's examplemod (https://github.com/McJty/YouTubeModding14/blob/master/src/main/java/com/mcjty/mytutorial/entities/WeirdMobModel.java) for 1.14/1.15, they've all been using bodypart.addBox(). However, in my environment, the ModelRenderer.class doesn't even have the addBox method. When I try to use addBox Intellij says "cannot resolve addBox() in ModelRenderer" And I looked ModelRenderer up on the documentation and its totally there. What do I even do to get around this?
+
+
+
+If you need to send additional data only on spawn, then you need to just implement IEntityAdditionalSpawnData on your entity and encode any additional data.
+
+If you need continuous synchronization, look at EntityDataManager.
+
+A clue to the OverlayTexture (CombinedOverlay) is in
+
+LivingRenderer:
+
+public static int getPackedOverlay (LivingEntity entity, float uIn)
+
+uIn appears to be partial ticks?
+
+   public static int func_229117_c_(LivingEntity p_229117_0_, float p_229117_1_) {
+      return OverlayTexture.func_229201_a_(OverlayTexture.func_229199_a_(p_229117_1_), OverlayTexture.func_229202_a_(p_229117_0_.hurtTime > 0 || p_229117_0_.deathTime > 0));
+   }
+
+ OverlayTexture.func_229201_a_ getPackedUV
+
+The overlay texture is
+grid:
+i<8 ->  B200 00FF  RED
+i>=8 -> linear interpolate 64-255 << 24 OR 00FF FFFF
+
+
+ABGR
+
+RenderTypes
+
+CUTOUT = alpha threshold
+MIPPED
+
+
+WorldRenderer::updateCameraAndRender
+
+Order of rendering:
+
+      iprofiler.endStartSection("terrain");
+        this.renderBlockLayer(RenderType.getSolid(), matrixStackIn, d0, d1, d2);
+        this.renderBlockLayer(RenderType.getCutoutMipped(), matrixStackIn, d0, d1, d2);
+        this.renderBlockLayer(RenderType.getCutout(), matrixStackIn, d0, d1, d2);
+
+      iprofiler.endStartSection("entities");
+         this.renderEntity(entity, d0, d1, d2, partialTicks, matrixStackIn, irendertypebuffer);
+      irendertypebuffer$impl.finish(RenderType.getEntitySolid(AtlasTexture.LOCATION_BLOCKS_TEXTURE));
+      irendertypebuffer$impl.finish(RenderType.getEntityCutout(AtlasTexture.LOCATION_BLOCKS_TEXTURE));
+      irendertypebuffer$impl.finish(RenderType.getEntityCutoutNoCull(AtlasTexture.LOCATION_BLOCKS_TEXTURE));
+      irendertypebuffer$impl.finish(RenderType.getEntitySmoothCutout(AtlasTexture.LOCATION_BLOCKS_TEXTURE));
+
+      iprofiler.endStartSection("blockentities");
+                TileEntityRendererDispatcher.instance.renderTileEntity(tileentity1, partialTicks, matrixStackIn, irendertypebuffer1);
+
+
+      irendertypebuffer$impl.finish(RenderType.getSolid());
+      irendertypebuffer$impl.finish(Atlases.getSolidBlockType());
+      irendertypebuffer$impl.finish(Atlases.getCutoutBlockType());
+      irendertypebuffer$impl.finish(Atlases.getBedType());
+      irendertypebuffer$impl.finish(Atlases.getShulkerBoxType());
+      irendertypebuffer$impl.finish(Atlases.getSignType());
+      irendertypebuffer$impl.finish(Atlases.getChestType());
+      this.renderTypeTextures.getOutlineBufferSource().finish();
+
+BellTileEntityRenderer:
+    BELL_BODY_TEXTURE = new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation("entity/bell/bell_body"));
+    IVertexBuilder lvt_10_2_ = BELL_BODY_TEXTURE.getBuffer(p_225616_4_, RenderType::getEntitySolid);
+
+ChestTileEntityRenderer:
+         IVertexBuilder ivertexbuilder = material.getBuffer(bufferIn, RenderType::getEntityCutout);
+
+        private static Material getChestMaterial(String p_228774_0_) {
+          return new Material(CHEST_ATLAS, new ResourceLocation("entity/chest/" + p_228774_0_));
+        }
+
+SignTileEntityRenderer:
+      super(RenderType::getEntityCutoutNoCull);
+
+BeaconTileEntityRenderer:
+    p_228842_1_.getBuffer(RenderType.getBeaconBeam(p_228842_2_, false))
+    RenderType.State lvt_2_1_ = RenderType.State.getBuilder().texture(new TextureState(p_228637_0_, false, false)).transparency(p_228637_1_ ? TRANSLUCENT_TRANSPARENCY : NO_TRANSPARENCY).writeMask(p_228637_1_ ? COLOR_WRITE : COLOR_DEPTH_WRITE).fog(NO_FOG).build(false);
+    return makeType("beacon_beam", DefaultVertexFormats.BLOCK, 7, 256, false, true, lvt_2_1_);
+
+PistonTileEntityRenderer:
+
+    public static List<RenderType> getBlockRenderTypes() {
+      return ImmutableList.of(getSolid(), getCutoutMipped(), getCutout(), getTranslucent());
+    }
+
+  forEach(rendertype -> {
+        net.minecraftforge.client.ForgeHooksClient.setRenderLayer(rendertype);
+        IVertexBuilder ivertexbuilder = p_228876_4_.getBuffer(rendertype);
+
+        (block model renderer)
+
+
+https://medium.com/grandcentrix/how-to-debug-gradle-plugins-with-intellij-eef2ef681a7b
+
+TileEntity:
+read; write
+markDirty
+getUpdatePacket
+getUpdateTag
+receiveClientEvent -?
+
+   public static final TileEntityType<FurnaceTileEntity> FURNACE = register("furnace", TileEntityType.Builder.create(FurnaceTileEntity::new, Blocks.FURNACE));
+
+
+    // retrieve the [U,V] coordinates of the texture that we want to use
+
+//    TextureAtlasSprite sprite = null;
+//    boolean textureIsMissing = true;
+//    ModelManager modelManager = Minecraft.getInstance().getModelManager();
+//    AtlasTexture atlasTexture = modelManager.getAtlasTexture(LOCATION_BLOCKS_TEXTURE);  // see static initialiser for SOLID in RenderType
+//    if (atlasTexture != null) {
+//       sprite = atlasTexture.getSprite(StartupClientOnly.MBE21_CUBE_TEXTURE);
+//      if (sprite != null) {
+//        textureIsMissing = false;
+//      }
+//    }
+//
+//    if (textureIsMissing || sprite == null) {  // null check is to prevent compiler complaining
+//      final ResourceLocation MISSING_TEXTURE = MissingTextureSprite.getLocation();
+//      sprite = modelManager.getAtlasTexture(LOCATION_BLOCKS_TEXTURE).getSprite(MISSING_TEXTURE);
+//    }
+
+//    Vec2f bottomLeftUV = new Vec2f(sprite.getMinU(), sprite.getMaxV());
+//    float UVwidth = sprite.getMaxU() - sprite.getMinU();
+//    float UVheight = sprite.getMinV() - sprite.getMaxV();
+
+
+
+--------
+Tags for grouping types of objects together eg crops, leaves, wool
+eg for leaves tag:
+data.minecraft.tags.blocks.leaves.json contains a list of all the blocks which receive this tag
+https://minecraft.gamepedia.com/Tag
+
+Minecraft state:
+IntegerProperty, BooleanProperty, DirectionProperty, EnumProperty
+
+BlockState has a large number of methods to determine capabilities
+
+
+Updating Forge versions:
+mods.toml:  loaderVersion
+
+Updating your mod version number:
+in build.gradle
+(copied automatically to mods.toml)
+
+
+Common Setup, Client Setup, Server Setup, Intermod communications
+
+
+-
+Couple of notes regarding (ticking) mod tile entities:
+
+Be sure that your TE implements ITickableTileEntity and not ITickable. If you don't, you won't see any errors, but your TE won't tick.
+When registering your TE, be sure to pass all the blocks for that TE (most likely just one block, but can be multiple) to the TileEntityType.Builder.create() method. Again, if you don't - no errors, but no ticking (and no rendering, if you're using a TESR). Probably good practice to do this for every TE regardless.
+
+There's a new BlockRayTraceResult class which is used in several place to aggregate some parameters. E.g. ItemUseContext and BlockUseContext constructors, ItemStack.onItemUseFirst() etc.
+
+ExtendedBlockStates changed:
+https://github.com/MinecraftForge/MinecraftForge/pull/5564
+
+sOpaqueCube => remove, mc now checks this with the block's voxelshape
+
+--------------
+Coverage Testing complete:
+
+Ideas for future topics
+
+Blocks -
+   #simple block modelling
+   #more-complicated block modelling
+   #blocks with properties / metadata
+   block with display tick
+   block with scheduled update
+   redstone compatible blocks
+   animated texture
+   ISmartBlockModel
+Items -
+   #simple item
+   #item with sub-types
+   #item with NBT - Brandon's project
+   #how to control rendering in the different views (1st person, 3rd person, inventory, etc)
+   #how to control rendering of bow-like (Item.getModel)
+   armour?
+   #tool - strength vs blocks, durability, various events?
+   ISmartItemModel - see http://www.minecraftforge.net/forum/index.php/topic,28714.0.html
+Recipes
+  variety of recipe types
+TileEntity
+  # simple tile entity with NBT, no renderer
+  # simple TileEntitySpecialRenderer
+Containers
+  #furnace-like
+  #chest-like
+Entities
+  basic entity that can be spawned and disappears after a certain time
+  missile entity
+  entity rendering / techne -based / animation
+  entity with basic AI
+  - use of datawatchers
+Sound
+  - point and continuous sound effects
+EntityFX
+  # simple effect generator
+Events
+  show some events on different busses
+GUI
+  # customise the standard HUD render elements (crosshairs, etc)
+  # create a custom GUI
+  # some overlay examples - Nephroid
+Terrain generation
+
+Generate a new dimension
+
+Different rendering modes
+
+Miscellaneous
+  best practice error logging (I could sure use some help on that one!)
+
+Places to store extra data....
+WorldSavedData
+http://www.minecraftforge.net/forum/index.php/topic,26304.0.html
+https://github.com/Questology/Questology/blob/master/src/main/java/demonmodders/questology/QuestologyWorldData.java
+About the player
+IExtendedEntityProperties http://www.minecraftforge.net/forum/index.php/topic,26810.0.html
+
+
+Basic packets
+
+Extra info for entities:
+https://www.youtube.com/watch?v=6TLgIgXogwA
+http://www.minecraftforge.net/forum/index.php/topic,27137.msg138553.html#msg138553
+http://www.minecraftforge.net/forum/index.php/topic,27137.msg138502.html#msg138502
+http://www.minecraftforge.net/forum/index.php/topic,27401.0.html
+------------------
+ItemModelsProperties
+
+Map of ResourceLocation to IItemPropertyGetter
+
+Each one is a lambda function that takes (ItemStack var1, @Nullable ClientWorld var2, @Nullable LivingEntity var3) arguments and returns a float
+
+Two types of properties:
+global (added using func_239420_a_)
+per-item (added using func_239418_a_)
+
+-----------------
+MCP uses two different sets of mappings which are applied separately during the workspace setup. The difference between Notch, Searge and MCP mappings can be seen in the example below:
+
+// Notch
+boolean a(rw ☃);
+
+// Searge
+boolean func_72838_d(Entity p_72838_1_);
+
+// MCP
+boolean spawnEntityInWorld(Entity entityIn);
+Notch mappings are the original names in the obfuscated Minecraft binary. They change regularly with new Minecraft versions.
+
+Searge mappings contain unique names for all obfuscated methods, fields and parameters, as well as human-readable names for the classes. Unlike Notch mappings they usually stay the same across Minecraft updates unless the method signatures change. For SpongeVanilla and SpongeForge, they are also used in production (outside of your IDE).
+
+MCP mappings contain human-readable names largely contributed by the community. They are typically only used in the development environment, and then re-obfuscated to Searge or Notch mappings.
+
