@@ -71,7 +71,7 @@ public class CapabilityProviderFlowerBag  implements ICapabilitySerializable<INB
         return itemStackHandlerFlowerBag;
     }
 
-    private static final int MAX_NUMBER_OF_FLOWERS_IN_BAG = 16;
+    private static final int MAX_NUMBER_OF_FLOWERS_IN_BAG = 27;
 
     private ItemStackHandlerFlowerBag itemStackHandlerFlowerBag;  // initially null until our first call to getCachedInventory
 

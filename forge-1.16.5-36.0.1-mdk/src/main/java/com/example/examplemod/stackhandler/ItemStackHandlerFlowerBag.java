@@ -18,7 +18,7 @@ import java.util.Optional;
 public class ItemStackHandlerFlowerBag extends ItemStackHandler {
 
     public static final int MIN_FLOWER_SLOTS = 1;
-    public static final int MAX_FLOWER_SLOTS = 16;
+    public static final int MAX_FLOWER_SLOTS = 27;
 
     public ItemStackHandlerFlowerBag(int numberOfSlots) {
         super(MathHelper.clamp(numberOfSlots, MIN_FLOWER_SLOTS, MAX_FLOWER_SLOTS));
@@ -34,8 +34,8 @@ public class ItemStackHandlerFlowerBag extends ItemStackHandler {
         }
         if (stack.isEmpty()) return false;
         Item item = stack.getItem();
-        if (item.isIn(ItemTags.SMALL_FLOWERS) || item.isIn(ItemTags.TALL_FLOWERS)) return true;
-        return false;
+        return true;
+
     }
 
     /**Count how many empty slots are in the bag

@@ -69,7 +69,7 @@ public class ContainerFlowerBag extends Container {
 
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int BAG_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-    private static final int MAX_EXPECTED_BAG_SLOT_COUNT = 16;
+    private static final int MAX_EXPECTED_BAG_SLOT_COUNT = 27;
 
     public static final int BAG_INVENTORY_YPOS = 26;  // the ContainerScreenFlowerBag needs to know these so it can tell where to draw the Titles
     public static final int PLAYER_INVENTORY_YPOS = 84;
@@ -90,7 +90,7 @@ public class ContainerFlowerBag extends Container {
         final int SLOT_X_SPACING = 18;
         final int SLOT_Y_SPACING = 18;
         final int HOTBAR_XPOS = 8;
-        final int HOTBAR_YPOS = 142;
+        final int HOTBAR_YPOS = 143;
         // Add the players hotbar to the gui - the [xpos, ypos] location of each item
         for (int x = 0; x < HOTBAR_SLOT_COUNT; x++) {
             int slotNumber = x;
@@ -113,7 +113,7 @@ public class ContainerFlowerBag extends Container {
             bagSlotCount = MathHelper.clamp(bagSlotCount, 1, MAX_EXPECTED_BAG_SLOT_COUNT);
         }
 
-        final int BAG_SLOTS_PER_ROW = 8;
+        final int BAG_SLOTS_PER_ROW = 9;
         final int BAG_INVENTORY_XPOS = 17;
         // Add the tile inventory container to the gui
         for (int bagSlot = 0; bagSlot < bagSlotCount; ++bagSlot) {
