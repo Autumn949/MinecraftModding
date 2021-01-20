@@ -1,7 +1,6 @@
 package com.example.examplemod;
 
 import com.example.examplemod.containers.ContainerBasic;
-import com.example.examplemod.containers.ContainerFlowerBag;
 import com.example.examplemod.containers.ContainerFurnace;
 import com.example.examplemod.tiles.TileEntityFurnace;
 import com.example.examplemod.tiles.TutorialTileEntity;
@@ -16,7 +15,6 @@ public class ModTiles {
    //containers
     public static final RegistryObject<ContainerType<ContainerBasic>> TUTORIAL_CONTAINER = Registration.CONTAINERS.register("tutorial_container", () -> IForgeContainerType.create(ContainerBasic::createContainerClientSide));
     public static final RegistryObject<ContainerType<ContainerFurnace>> TUTORIAL_FURNACE_CONTAINER = Registration.CONTAINERS.register("tutorial_furnace",()->IForgeContainerType.create(ContainerFurnace::createContainerClientSide));
-    public static final RegistryObject<ContainerType<ContainerFlowerBag>> TUTORIAL_BACKPACK_CONTAINER = Registration.CONTAINERS.register("tutorial_backpack", ()->IForgeContainerType.create(ContainerFlowerBag::createContainerClientSide));
     public static void register(){
 
     }
