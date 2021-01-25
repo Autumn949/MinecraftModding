@@ -15,12 +15,12 @@ import java.util.Optional;
  * Used to store Flower ItemStacks.  Will only accept SMALL_FLOWERS and TALL_FLOWERS
  *
  */
-public class ItemStackHandlerFlowerBag extends ItemStackHandler {
+public class ItemStackHandlerTutorialBackpack extends ItemStackHandler {
 
     public static final int MIN_FLOWER_SLOTS = 1;
     public static final int MAX_FLOWER_SLOTS = 27;
 
-    public ItemStackHandlerFlowerBag(int numberOfSlots) {
+    public ItemStackHandlerTutorialBackpack(int numberOfSlots) {
         super(MathHelper.clamp(numberOfSlots, MIN_FLOWER_SLOTS, MAX_FLOWER_SLOTS));
         if (numberOfSlots < MIN_FLOWER_SLOTS || numberOfSlots > MAX_FLOWER_SLOTS) {
             throw new IllegalArgumentException("Invalid number of flower slots:"+numberOfSlots);

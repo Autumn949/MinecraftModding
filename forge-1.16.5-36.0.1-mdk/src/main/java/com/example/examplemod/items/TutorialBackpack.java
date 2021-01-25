@@ -1,21 +1,10 @@
 package com.example.examplemod.items;
 
-import com.example.examplemod.TutorialArmorMaterial;
-import com.example.examplemod.capibilities.CapabilityProviderFlowerBag;
-import com.example.examplemod.containers.ContainerFlowerBag;
-import com.example.examplemod.stackhandler.ItemStackHandlerFlowerBag;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IDispenseItemBehavior;
-import net.minecraft.enchantment.IArmorVanishable;
+import com.example.examplemod.capibilities.CapabilityProviderTutorialBackpack;
+import com.example.examplemod.containers.ContainerTutorialBackpack;
+import com.example.examplemod.stackhandler.ItemStackHandlerTutorialBackpack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -26,11 +15,8 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -39,13 +25,9 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Logger;
 
 public class TutorialBackpack extends ArmorItem {
 
@@ -62,7 +44,7 @@ public class TutorialBackpack extends ArmorItem {
         if(playerIn.isSneaking()) {
             if (!worldIn.isRemote) {  // server only!
                 INamedContainerProvider containerProviderFlowerBag = new ContainerProviderFlowerBag(this, itemstack);
-                final int NUMBER_OF_FLOWER_SLOTS = 16;
+                final int NUMBER_OF_FLOWER_SLOTS = 27;
                 NetworkHooks.openGui((ServerPlayerEntity) playerIn,
                         containerProviderFlowerBag,
                         (packetBuffer)->{packetBuffer.writeInt(NUMBER_OF_FLOWER_SLOTS);});
@@ -110,11 +92,11 @@ public class TutorialBackpack extends ArmorItem {
         }
 
         // go through each flower ItemStack in our flower bag and try to insert as many as possible into the tile's inventory.
-        ItemStackHandlerFlowerBag itemStackHandlerFlowerBag =  tutorialBackpack.getItemStackHandlerFlowerBag(itemStack);
-        for (int i = 0; i < itemStackHandlerFlowerBag.getSlots(); i++) {
-            ItemStack flower = itemStackHandlerFlowerBag.getStackInSlot(i);
+        ItemStackHandlerTutorialBackpack itemStackHandlerTutorialBackpack =  tutorialBackpack.getItemStackHandlerFlowerBag(itemStack);
+        for (int i = 0; i < itemStackHandlerTutorialBackpack.getSlots(); i++) {
+            ItemStack flower = itemStackHandlerTutorialBackpack.getStackInSlot(i);
             ItemStack flowersWhichDidNotFit = ItemHandlerHelper.insertItemStacked(tileInventory, flower, false);
-            itemStackHandlerFlowerBag.setStackInSlot(i, flowersWhichDidNotFit);
+            itemStackHandlerTutorialBackpack.setStackInSlot(i, flowersWhichDidNotFit);
         }
         tileEntity.markDirty();           // make sure that the tileEntity knows we have changed its contents
 
@@ -158,9 +140,9 @@ public class TutorialBackpack extends ArmorItem {
          * The name is misleading; createMenu has nothing to do with creating a Screen, it is used to create the Container on the server only
          */
         @Override
-        public ContainerFlowerBag createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-            ContainerFlowerBag newContainerServerSide =
-                    ContainerFlowerBag.createContainerServerSide(windowID, playerInventory,
+        public ContainerTutorialBackpack createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+            ContainerTutorialBackpack newContainerServerSide =
+                    ContainerTutorialBackpack.createContainerServerSide(windowID, playerInventory,
                             itemFlowerBag.getItemStackHandlerFlowerBag(itemStackFlowerBag),
                             itemStackFlowerBag);
             return newContainerServerSide;
@@ -178,7 +160,7 @@ public class TutorialBackpack extends ArmorItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT oldCapNbt) {
 
-        return new CapabilityProviderFlowerBag();
+        return new CapabilityProviderTutorialBackpack();
     }
 
     /**
@@ -186,12 +168,12 @@ public class TutorialBackpack extends ArmorItem {
      * @param itemStack
      * @return
      */
-    private static ItemStackHandlerFlowerBag getItemStackHandlerFlowerBag(ItemStack itemStack) {
+    private static ItemStackHandlerTutorialBackpack getItemStackHandlerFlowerBag(ItemStack itemStack) {
         IItemHandler flowerBag = itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-        if (flowerBag == null || !(flowerBag instanceof ItemStackHandlerFlowerBag)) {
-            return new ItemStackHandlerFlowerBag(1);
+        if (flowerBag == null || !(flowerBag instanceof ItemStackHandlerTutorialBackpack)) {
+            return new ItemStackHandlerTutorialBackpack(1);
         }
-        return (ItemStackHandlerFlowerBag)flowerBag;
+        return (ItemStackHandlerTutorialBackpack)flowerBag;
     }
 
     private final String BASE_NBT_TAG = "base";
@@ -216,8 +198,8 @@ public class TutorialBackpack extends ArmorItem {
     @Override
     public CompoundNBT getShareTag(ItemStack stack) {
         CompoundNBT baseTag = stack.getTag();
-        ItemStackHandlerFlowerBag itemStackHandlerFlowerBag = getItemStackHandlerFlowerBag(stack);
-        CompoundNBT capabilityTag = itemStackHandlerFlowerBag.serializeNBT();
+        ItemStackHandlerTutorialBackpack itemStackHandlerTutorialBackpack = getItemStackHandlerFlowerBag(stack);
+        CompoundNBT capabilityTag = itemStackHandlerTutorialBackpack.serializeNBT();
         CompoundNBT combinedTag = new CompoundNBT();
         if (baseTag != null) {
             combinedTag.put(BASE_NBT_TAG, baseTag);
@@ -242,8 +224,8 @@ public class TutorialBackpack extends ArmorItem {
         CompoundNBT baseTag = nbt.getCompound(BASE_NBT_TAG);              // empty if not found
         CompoundNBT capabilityTag = nbt.getCompound(CAPABILITY_NBT_TAG); // empty if not found
         stack.setTag(baseTag);
-        ItemStackHandlerFlowerBag itemStackHandlerFlowerBag = getItemStackHandlerFlowerBag(stack);
-        itemStackHandlerFlowerBag.deserializeNBT(capabilityTag);
+        ItemStackHandlerTutorialBackpack itemStackHandlerTutorialBackpack = getItemStackHandlerFlowerBag(stack);
+        itemStackHandlerTutorialBackpack.deserializeNBT(capabilityTag);
     }
 
     // ------------ code used for changing the appearance of the bag based on the number of flowers in it
@@ -257,7 +239,7 @@ public class TutorialBackpack extends ArmorItem {
      * @return 0.0 (empty) -> 1.0 (full) based on the number of slots in the bag which are in use
      */
     public static float getFullnessPropertyOverride(ItemStack itemStack, @Nullable World world, @Nullable LivingEntity livingEntity) {
-        ItemStackHandlerFlowerBag flowerBag = getItemStackHandlerFlowerBag(itemStack);
+        ItemStackHandlerTutorialBackpack flowerBag = getItemStackHandlerFlowerBag(itemStack);
         float fractionEmpty = flowerBag.getNumberOfEmptySlots() / (float)flowerBag.getSlots();
         return 1.0F - fractionEmpty;
     }

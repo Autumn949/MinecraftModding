@@ -1,6 +1,6 @@
 package com.example.examplemod.capibilities;
 
-import com.example.examplemod.stackhandler.ItemStackHandlerFlowerBag;
+import com.example.examplemod.stackhandler.ItemStackHandlerTutorialBackpack;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -12,7 +12,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CapabilityProviderFlowerBag  implements ICapabilitySerializable<INBT> {
+public class CapabilityProviderTutorialBackpack implements ICapabilitySerializable<INBT> {
 
     private final Direction NO_SPECIFIC_SIDE = null;
 
@@ -64,16 +64,16 @@ public class CapabilityProviderFlowerBag  implements ICapabilitySerializable<INB
      *   return that without a dedicated method to perform a cache check.
      * @return the ItemStackHandlerFlowerBag which stores the flowers.
      */
-    private ItemStackHandlerFlowerBag getCachedInventory() {
-        if (itemStackHandlerFlowerBag == null) {
-            itemStackHandlerFlowerBag = new ItemStackHandlerFlowerBag(MAX_NUMBER_OF_FLOWERS_IN_BAG);
+    private ItemStackHandlerTutorialBackpack getCachedInventory() {
+        if (itemStackHandlerTutorialBackpack == null) {
+            itemStackHandlerTutorialBackpack = new ItemStackHandlerTutorialBackpack(MAX_NUMBER_OF_FLOWERS_IN_BAG);
         }
-        return itemStackHandlerFlowerBag;
+        return itemStackHandlerTutorialBackpack;
     }
 
     private static final int MAX_NUMBER_OF_FLOWERS_IN_BAG = 27;
 
-    private ItemStackHandlerFlowerBag itemStackHandlerFlowerBag;  // initially null until our first call to getCachedInventory
+    private ItemStackHandlerTutorialBackpack itemStackHandlerTutorialBackpack;  // initially null until our first call to getCachedInventory
 
     //  a supplier: when called, returns the result of getCachedInventory()
     private final LazyOptional<IItemHandler> lazyInitialisionSupplier = LazyOptional.of(this::getCachedInventory);

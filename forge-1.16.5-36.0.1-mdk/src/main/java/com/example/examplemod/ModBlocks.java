@@ -1,8 +1,6 @@
 package com.example.examplemod;
 
-import com.example.examplemod.blocks.TutorialAdvancedBlock;
-import com.example.examplemod.blocks.TutorialBlockFurnace;
-import com.example.examplemod.blocks.TutorialInventoryBlock;
+import com.example.examplemod.blocks.*;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -22,9 +20,11 @@ public class ModBlocks {
             new Block(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).sound(SoundType.METAL)));
 
     //Advanced Blocks
+    public static final RegistryObject<Block> TUTORIAL_POWERED_FURNACE = register("tutorial_powered_furnace", ()-> new PoweredFurnaceBlock(AbstractBlock.Properties.create(Material.IRON)));
     public static final RegistryObject<Block> TUTORIAL_ADVANCED_BLOCK = register("tutorial_block_advanced",()->new TutorialAdvancedBlock(AbstractBlock.Properties.create(Material.IRON)));
    public static final RegistryObject<Block> TUTORIAL_CHEST_BLOCK = register("tutorial_chest_block",()-> new TutorialInventoryBlock());
     public static final RegistryObject<Block> TUTORIAL_BLOCK_FURNACE = register("tutorial_block_furnace",()-> new TutorialBlockFurnace());
+    public static final RegistryObject<Block> GEN_BLOCK = register("gen_block",()-> new GeneratorBlock(AbstractBlock.Properties.create(Material.IRON)));
     static void register() {}
     //RegistersBlock WO Item
     private static <T extends Block> RegistryObject<T> registerNoItem(String name, Supplier<T> block) {

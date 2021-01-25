@@ -1,23 +1,11 @@
 package com.example.examplemod.screens;
-import com.example.examplemod.ModItems;
-import com.example.examplemod.containers.ContainerBasic;
-import com.example.examplemod.containers.ContainerFlowerBag;
+import com.example.examplemod.containers.ContainerTutorialBackpack;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.awt.*;
 
 // * The Screen is drawn in several layers, most importantly:
 //         * Background - renderBackground() - eg a grey fill
@@ -25,11 +13,11 @@ import java.awt.*;
 //         * Foreground layer - typically text labels
 //         * renderHoveredToolTip - for tool tips when the mouse is hovering over something of interest
 
-public class ContainerScreenTutorialBackpack extends ContainerScreen<ContainerFlowerBag> {
+public class ContainerScreenTutorialBackpack extends ContainerScreen<ContainerTutorialBackpack> {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
     private final int inventoryRows;
 
-    public ContainerScreenTutorialBackpack(ContainerFlowerBag p_i51095_1_, PlayerInventory p_i51095_2_, ITextComponent p_i51095_3_) {
+    public ContainerScreenTutorialBackpack(ContainerTutorialBackpack p_i51095_1_, PlayerInventory p_i51095_2_, ITextComponent p_i51095_3_) {
         super(p_i51095_1_, p_i51095_2_, p_i51095_3_);
         this.passEvents = false;
         this.inventoryRows = 3;

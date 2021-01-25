@@ -1,7 +1,7 @@
 package com.example.examplemod.containers;
 
 import com.example.examplemod.ModTiles;
-import com.example.examplemod.stackhandler.ItemStackHandlerFlowerBag;
+import com.example.examplemod.stackhandler.ItemStackHandlerTutorialBackpack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -10,12 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.items.SlotItemHandler;
-import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nonnull;
-import java.util.logging.Logger;
 
-public class ContainerFlowerBag extends Container {
+public class ContainerTutorialBackpack extends Container {
 
     /**
      * Creates the container to be used on the server side
@@ -25,9 +23,9 @@ public class ContainerFlowerBag extends Container {
      * @param flowerBag the ItemStack for the flower bag; this is used for checking whether the player is still holding the bag in their hand
      * @return
      */
-    public static ContainerFlowerBag createContainerServerSide(int windowID, PlayerInventory playerInventory, ItemStackHandlerFlowerBag bagContents,
-                                                               ItemStack flowerBag) {
-        return new ContainerFlowerBag(windowID, playerInventory, bagContents, flowerBag);
+    public static ContainerTutorialBackpack createContainerServerSide(int windowID, PlayerInventory playerInventory, ItemStackHandlerTutorialBackpack bagContents,
+                                                                      ItemStack flowerBag) {
+        return new ContainerTutorialBackpack(windowID, playerInventory, bagContents, flowerBag);
     }
 
     /**
@@ -37,21 +35,21 @@ public class ContainerFlowerBag extends Container {
      * @param extraData extra data sent from the server
      * @return
      */
-    public static ContainerFlowerBag createContainerClientSide(int windowID, PlayerInventory playerInventory, net.minecraft.network.PacketBuffer extraData) {
+    public static ContainerTutorialBackpack createContainerClientSide(int windowID, PlayerInventory playerInventory, net.minecraft.network.PacketBuffer extraData) {
         // for this example we use extraData for the server to tell the client how many slots for flower itemstacks the flower bag contains.
         int numberOfFlowerSlots = extraData.readInt();
 
         try {
-            ItemStackHandlerFlowerBag itemStackHandlerFlowerBag = new ItemStackHandlerFlowerBag(numberOfFlowerSlots);
+            ItemStackHandlerTutorialBackpack itemStackHandlerTutorialBackpack = new ItemStackHandlerTutorialBackpack(numberOfFlowerSlots);
 
             // on the client side there is no parent ItemStack to communicate with - we use a dummy inventory
-            return new ContainerFlowerBag(windowID, playerInventory, itemStackHandlerFlowerBag, ItemStack.EMPTY);
+            return new ContainerTutorialBackpack(windowID, playerInventory, itemStackHandlerTutorialBackpack, ItemStack.EMPTY);
         } catch (IllegalArgumentException iae) {
         }
         return null;
     }
 
-    private final ItemStackHandlerFlowerBag itemStackHandlerFlowerBag;
+    private final ItemStackHandlerTutorialBackpack itemStackHandlerTutorialBackpack;
     private final ItemStack itemStackBeingHeld;
 
     // must assign a slot number to each of the slots used by the GUI.
@@ -71,20 +69,20 @@ public class ContainerFlowerBag extends Container {
     private static final int BAG_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
     private static final int MAX_EXPECTED_BAG_SLOT_COUNT = 27;
 
-    public static final int BAG_INVENTORY_YPOS = 26;  // the ContainerScreenFlowerBag needs to know these so it can tell where to draw the Titles
+    public static final int BAG_INVENTORY_YPOS = 18;  // the ContainerScreenFlowerBag needs to know these so it can tell where to draw the Titles
     public static final int PLAYER_INVENTORY_YPOS = 84;
 
     /**
      * Creates a container suitable for server side or client side
      * @param windowId ID of the container
      * @param playerInv the inventory of the player
-     * @param itemStackHandlerFlowerBag the inventory stored in the bag
+     * @param itemStackHandlerTutorialBackpack the inventory stored in the bag
      */
-    private ContainerFlowerBag(int windowId, PlayerInventory playerInv,
-                               ItemStackHandlerFlowerBag itemStackHandlerFlowerBag,
-                               ItemStack itemStackBeingHeld) {
+    private ContainerTutorialBackpack(int windowId, PlayerInventory playerInv,
+                                      ItemStackHandlerTutorialBackpack itemStackHandlerTutorialBackpack,
+                                      ItemStack itemStackBeingHeld) {
         super(ModTiles.TUTORIAL_BACKPACK_CONTAINER.get(), windowId);
-        this.itemStackHandlerFlowerBag = itemStackHandlerFlowerBag;
+        this.itemStackHandlerTutorialBackpack = itemStackHandlerTutorialBackpack;
         this.itemStackBeingHeld = itemStackBeingHeld;
 
         final int SLOT_X_SPACING = 18;
@@ -108,13 +106,13 @@ public class ContainerFlowerBag extends Container {
             }
         }
 
-        int bagSlotCount = itemStackHandlerFlowerBag.getSlots();
+        int bagSlotCount = itemStackHandlerTutorialBackpack.getSlots();
         if (bagSlotCount < 1 || bagSlotCount > MAX_EXPECTED_BAG_SLOT_COUNT) {
             bagSlotCount = MathHelper.clamp(bagSlotCount, 1, MAX_EXPECTED_BAG_SLOT_COUNT);
         }
 
         final int BAG_SLOTS_PER_ROW = 9;
-        final int BAG_INVENTORY_XPOS = 17;
+        final int BAG_INVENTORY_XPOS = 8;
         // Add the tile inventory container to the gui
         for (int bagSlot = 0; bagSlot < bagSlotCount; ++bagSlot) {
             int slotNumber = bagSlot;
@@ -122,7 +120,7 @@ public class ContainerFlowerBag extends Container {
             int bagCol = bagSlot % BAG_SLOTS_PER_ROW;
             int xpos = BAG_INVENTORY_XPOS + SLOT_X_SPACING * bagCol;
             int ypos = BAG_INVENTORY_YPOS + SLOT_Y_SPACING * bagRow;
-            addSlot(new SlotItemHandler(itemStackHandlerFlowerBag, slotNumber, xpos, ypos));
+            addSlot(new SlotItemHandler(itemStackHandlerTutorialBackpack, slotNumber, xpos, ypos));
         }
     }
 
@@ -152,7 +150,7 @@ public class ContainerFlowerBag extends Container {
         if (sourceSlot == null || !sourceSlot.getHasStack()) return ItemStack.EMPTY;  //EMPTY_ITEM
         ItemStack sourceStack = sourceSlot.getStack();
         ItemStack copyOfSourceStack = sourceStack.copy();
-        final int BAG_SLOT_COUNT = itemStackHandlerFlowerBag.getSlots();
+        final int BAG_SLOT_COUNT = itemStackHandlerTutorialBackpack.getSlots();
 
         // Check if the slot clicked is one of the vanilla container slots
         if (sourceSlotIndex >= VANILLA_FIRST_SLOT_INDEX && sourceSlotIndex < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
@@ -194,7 +192,7 @@ public class ContainerFlowerBag extends Container {
      */
     @Override
     public void detectAndSendChanges() {
-        if (itemStackHandlerFlowerBag.isDirty()) {
+        if (itemStackHandlerTutorialBackpack.isDirty()) {
             CompoundNBT nbt = itemStackBeingHeld.getOrCreateTag();
             int dirtyCounter = nbt.getInt("dirtyCounter");
             nbt.putInt("dirtyCounter", dirtyCounter + 1);
