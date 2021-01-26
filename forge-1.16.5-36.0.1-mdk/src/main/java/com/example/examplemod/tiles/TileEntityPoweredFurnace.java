@@ -238,11 +238,14 @@ public static ItemStack getSmeltingResultForItem(World world, ItemStack itemStac
         }
 private int burnFuel() {
 
-
-        energyStorage.consumeEnergy(1);
-        markDirty();
-        return 1;
+        if (energyStorage.getEnergyStored() > 0) {
+                energyStorage.consumeEnergy(1);
+                markDirty();
+                return 1;
+        } else {
+return 0;
         }
+}
 
         public static Optional<FurnaceRecipe> getMatchingRecipeForInput(World world, ItemStack itemStack) {
                 RecipeManager recipeManager = world.getRecipeManager();

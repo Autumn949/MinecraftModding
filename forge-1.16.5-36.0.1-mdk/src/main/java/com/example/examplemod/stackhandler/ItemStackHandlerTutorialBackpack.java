@@ -33,7 +33,6 @@ public class ItemStackHandlerTutorialBackpack extends ItemStackHandler {
             throw new IllegalArgumentException("Invalid slot number:"+slot);
         }
         if (stack.isEmpty()) return false;
-        Item item = stack.getItem();
         return true;
 
     }

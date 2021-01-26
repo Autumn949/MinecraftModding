@@ -28,11 +28,11 @@ public class ExampleMod
 {
     public static final String MOD_ID = "examplemod";
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
     public static IEventBus MOD_EVENT_BUS;
 
     public ExampleMod() {
-        final boolean HIDE_CONSOLE_NOISE = false;  // todo get rid of all the noise from the console (after mod is constructed) to show warnings more clearly.
+        final boolean HIDE_CONSOLE_NOISE = true;  // todo get rid of all the noise from the console (after mod is constructed) to show warnings more clearly.
 
         MOD_EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();
         Registration.register();
