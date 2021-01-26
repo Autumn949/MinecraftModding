@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "ambientocclusion": false,
+  "textures": {
+        "down": "block/redstone_block",
+        "up": "block/redstone_block",
+        "north": "block/redstone_block",
+        "east": "block/redstone_block",
+        "south": "block/redstone_block",
+        "west": "block/redstone_block",
+        "particle": "block/redstone_block"
+    }
+}

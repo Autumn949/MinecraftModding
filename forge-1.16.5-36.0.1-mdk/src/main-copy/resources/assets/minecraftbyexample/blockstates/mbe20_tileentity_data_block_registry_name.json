@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "minecraftbyexample:block/mbe20_tileentity_data_block_model" }
+    }
+}

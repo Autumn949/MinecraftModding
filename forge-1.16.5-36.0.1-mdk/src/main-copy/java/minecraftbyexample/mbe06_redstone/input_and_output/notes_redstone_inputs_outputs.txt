@@ -1,0 +1,23 @@
+The redstone meter shows two techniques:
+(1) how to access redstone power levels on the client side, to change the rendering of a block
+(2) how to make a block which has power inputs and power outputs in the same block; including the use of block update ticks
+
+For (1):
+We want to change the appearance of our block based on the amount of redstone power it is receiving.
+This can't be done directly during Model rendering because the methods are not provided with access to the World, they are
+ methods are provided with an IBlockReader instead of a World; block rendering is multithreaded and
+  is performed on a cached copy of the world, which only stores some of the information and has no direct access to
+  weak power methods.
+It could be done by storing the redstone power in a blockstate (similar to the BlockRedstoneColouredLamp).
+The method we've used here is to use a TileEntity with stored information that is sent from server to client.  This is then
+  used by the TileEntityRenderer  (or could alternatively be passed to the Block renderer using IForgeTileEntity.getModelData())
+
+For (2):
+The key thing to understand is that the block must store its power level somehow on the server side, due to the way that
+  redstone power is propagated - in particular getWeakPower() is provided with IBlockReader not World;
+  see here for further explanation http://greyminecraftcoder.blogspot.com/2020/05/redstone-1152.html.
+  In this example, we use a TileEntity to store the power level information (similar to a ComparatorBlock and ComparatorTileEntity).
+
+We use scheduled block updates for the flashing; a similar strategy is used by RepeaterBlock.
+Alternatively, we could also have made our TileEntity implement ITickableTileEntity (so that the tick() method is
+  called every tick) and counted the number of ticks.
