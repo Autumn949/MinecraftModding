@@ -6,6 +6,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
@@ -23,7 +25,7 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 import java.util.Map;
 import java.util.Set;
 
-public class ExampleRecipe implements ICraftingRecipe {
+public class ExampleRecipe implements IExampleRecipe {
     static int MAX_WIDTH = 3;
     static int MAX_HEIGHT = 3;
     /**
@@ -80,6 +82,14 @@ public class ExampleRecipe implements ICraftingRecipe {
         return this.recipeItems;
     }
 
+
+
+
+    @Override
+    public ItemStack getCraftingResult(IInventory inv) {
+        return this.recipeOutput;
+    }
+
     /**
      * Used to determine if this recipe can fit in a grid of the given width/height
      */
@@ -87,17 +97,24 @@ public class ExampleRecipe implements ICraftingRecipe {
         return width >= this.recipeWidth && height >= this.recipeHeight;
     }
 
+    @Override
+    public Ingredient getInput() {
+        return this.recipeItems.get(0);
+    }
+
     /**
      * Used to check if a recipe matches current crafting inventory
      */
-    public boolean matches(CraftingInventory inv, World worldIn) {
-        for(int i = 0; i <= inv.getWidth() - this.recipeWidth; ++i) {
-            for(int j = 0; j <= inv.getHeight() - this.recipeHeight; ++j) {
-                if (this.checkMatch(inv, i, j, true)) {
+    @Override
+    public boolean matches(IInventory inv, World worldIn) {
+        int size = (int)Math.sqrt(inv.getSizeInventory());
+        for(int i = 0; i <=  size - this.recipeWidth; ++i) {
+            for(int j = 0; j <= size - this.recipeHeight; ++j) {
+                if (this.checkMatch((CraftingInventory) inv, i, j, true)) {
                     return true;
                 }
 
-                if (this.checkMatch(inv, i, j, false)) {
+                if (this.checkMatch((CraftingInventory) inv, i, j, false)) {
                     return true;
                 }
             }

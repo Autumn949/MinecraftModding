@@ -11,11 +11,9 @@ import net.minecraftforge.fml.RegistryObject;
 public class ModRecipes {
 
 
-
-    public static final IRecipeSerializer<ExampleRecipe> EXAMPLE_RECIPE_SERIALIZER = new ExampleRecipe.Serializer();
     public static final IRecipeType<IExampleRecipe> EXAMPLE_TYPE = IRecipeType.register("examplemod:example");
     public static final RegistryObject<IRecipeSerializer<?>> EXAMPLE_SERIALIZER = Registration.SERIALIZERS.register("example",
-            () -> EXAMPLE_RECIPE_SERIALIZER);
+            ExampleRecipe.Serializer::new);
     private static class RecipeType<T extends IRecipe<?>> implements IRecipeType<T> {
         @Override
         public String toString() {
