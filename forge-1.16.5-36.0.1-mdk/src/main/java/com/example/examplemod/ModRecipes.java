@@ -27,7 +27,7 @@ public class ModRecipes {
 
 
     private static <T extends IRecipeType> T registerType(ResourceLocation recipeTypeId) {
-        return (T) Registry.register(Registry.RECIPE_TYPE, recipeTypeId, new RecipeType<>());
+        return (T) Registry.register(ModRecipes.EXAMPLE_TYPE, recipeTypeId, new RecipeType<>());
     }
     public static void register(){
 

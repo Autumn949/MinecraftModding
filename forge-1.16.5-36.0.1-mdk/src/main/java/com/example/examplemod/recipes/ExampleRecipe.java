@@ -291,7 +291,9 @@ public class ExampleRecipe implements ICraftingRecipe {
         }
     }
     public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>>  implements IRecipeSerializer<ExampleRecipe> {
-        private static final ResourceLocation NAME = new ResourceLocation("minecraft", "crafting_shaped");
+        private static final ResourceLocation NAME = new ResourceLocation("examplemod", "example");
+
+        @Override
         public ExampleRecipe read(ResourceLocation recipeId, JsonObject json) {
             String s = JSONUtils.getString(json, "group", "");
             Map<String, Ingredient> map = ExampleRecipe.deserializeKey(JSONUtils.getJsonObject(json, "key"));
@@ -299,10 +301,11 @@ public class ExampleRecipe implements ICraftingRecipe {
             int i = astring[0].length();
             int j = astring.length;
             NonNullList<Ingredient> nonnulllist = ExampleRecipe.deserializeIngredients(astring, map, i, j);
-            ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+            ItemStack itemstack = ExampleRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
             return new ExampleRecipe(recipeId, s, i, j, nonnulllist, itemstack);
         }
 
+        @Override
         public ExampleRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
             int i = buffer.readVarInt();
             int j = buffer.readVarInt();
@@ -316,7 +319,7 @@ public class ExampleRecipe implements ICraftingRecipe {
             ItemStack itemstack = buffer.readItemStack();
             return new ExampleRecipe(recipeId, s, i, j, nonnulllist, itemstack);
         }
-
+        @Override
         public void write(PacketBuffer buffer, ExampleRecipe recipe) {
             buffer.writeVarInt(recipe.recipeWidth);
             buffer.writeVarInt(recipe.recipeHeight);

@@ -3,6 +3,16 @@
 
   "pattern":[
     "B"
-    ]
+    ],
+  "key":{
+    "B":
+    {
+      "item":"minecraft:wheat"
+    }
+  },
+  "result":
+  {
+    "item":"minecraft:wheat"
+  }
 
 }
