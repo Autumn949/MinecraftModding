@@ -68,7 +68,6 @@ public class ContainerWorkbench extends Container {
 
 
             Optional<IExampleRecipe> optional = world.getServer().getRecipeManager().getRecipe(ModRecipes.EXAMPLE_TYPE, inventory, world);
-            ExampleMod.LOGGER.info(optional.isEmpty());
             if (optional.isPresent()) {
                 ExampleMod.LOGGER.info("found");
                 IExampleRecipe icraftingrecipe = optional.get();

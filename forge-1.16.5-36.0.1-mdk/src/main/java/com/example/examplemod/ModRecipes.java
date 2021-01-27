@@ -5,7 +5,6 @@ import com.example.examplemod.recipes.IExampleRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fml.RegistryObject;
 
@@ -14,7 +13,7 @@ public class ModRecipes {
 
 
     public static final IRecipeSerializer<ExampleRecipe> EXAMPLE_RECIPE_SERIALIZER = new ExampleRecipe.Serializer();
-    public static final IRecipeType<IExampleRecipe> EXAMPLE_TYPE = registerType(IExampleRecipe.RECIPE_TYPE_ID);
+    public static final IRecipeType<IExampleRecipe> EXAMPLE_TYPE = IRecipeType.register("examplemod:example");
     public static final RegistryObject<IRecipeSerializer<?>> EXAMPLE_SERIALIZER = Registration.SERIALIZERS.register("example",
             () -> EXAMPLE_RECIPE_SERIALIZER);
     private static class RecipeType<T extends IRecipe<?>> implements IRecipeType<T> {
@@ -26,9 +25,7 @@ public class ModRecipes {
 
 
 
-    private static <T extends IRecipeType> T registerType(ResourceLocation recipeTypeId) {
-        return (T) Registry.register(ModRecipes.EXAMPLE_TYPE, recipeTypeId, new RecipeType<>());
-    }
+
     public static void register(){
 
     }
