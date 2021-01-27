@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
@@ -21,7 +22,7 @@ public class Registration {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ExampleMod.MOD_ID);
     public static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES,ExampleMod.MOD_ID);
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS,ExampleMod.MOD_ID);
-
+    public static final DeferredRegister<IRecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS,ExampleMod.MOD_ID);
 
 
     public static void register() {
@@ -30,9 +31,11 @@ public class Registration {
         ITEMS.register(modEventBus);
         TILES.register(modEventBus);
         CONTAINERS.register(modEventBus);
+        SERIALIZERS.register(modEventBus);
 
         ModBlocks.register();
         ModItems.register();
         ModTiles.register();
+        ModRecipes.register();
     }
 }

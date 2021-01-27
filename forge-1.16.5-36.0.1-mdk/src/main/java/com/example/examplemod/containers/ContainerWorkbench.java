@@ -2,7 +2,10 @@ package com.example.examplemod.containers;
 
 import com.example.examplemod.ExampleMod;
 import com.example.examplemod.ModBlocks;
+import com.example.examplemod.ModRecipes;
 import com.example.examplemod.ModTiles;
+import com.example.examplemod.recipes.ExampleRecipe;
+import com.example.examplemod.recipes.IExampleRecipe;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,10 +13,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.CraftingResultSlot;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.inventory.container.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.network.play.server.SSetSlotPacket;
@@ -21,8 +21,10 @@ import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import java.util.Optional;
+import java.util.Set;
 
 public class ContainerWorkbench extends Container {
     private final CraftingInventory craftMatrix = new CraftingInventory(this, 3, 3);
@@ -63,13 +65,16 @@ public class ContainerWorkbench extends Container {
         if (!world.isRemote) {
             ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)player;
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, inventory, world);
+
+
+            Optional<IExampleRecipe> optional = world.getServer().getRecipeManager().getRecipe(ModRecipes.EXAMPLE_TYPE, inventory, world);
             if (optional.isPresent()) {
-                ICraftingRecipe icraftingrecipe = optional.get();
+                IExampleRecipe icraftingrecipe = optional.get();
                 if (inventoryResult.canUseRecipe(world, serverplayerentity, icraftingrecipe)) {
                     itemstack = icraftingrecipe.getCraftingResult(inventory);
                 }
             }
+
 
             inventoryResult.setInventorySlotContents(0, itemstack);
             serverplayerentity.connection.sendPacket(new SSetSlotPacket(id, 0, itemstack));
