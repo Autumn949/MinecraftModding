@@ -17,6 +17,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.GameType;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -28,7 +29,7 @@ public class TutorialSapling extends BushBlock implements IGrowable {
     public static final IntegerProperty STAGE = BlockStateProperties.STAGE_0_1;
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0d,0.0d,2.0d,14.0d,12.0d,14.0d);
     private final Supplier<Tree> TREE;
-    public TutorialSapling(Supplier<Tree> treein, Properties properties) {
+    public TutorialSapling(Supplier<Structure> treein, Properties properties) {
         super(properties);
         this.TREE = treein;
     }
@@ -71,8 +72,7 @@ public class TutorialSapling extends BushBlock implements IGrowable {
 
     @Override
     public void grow(ServerWorld serverWorld,Random rand, BlockPos pos, BlockState state) {
-        this.TREE.get().attemptGrowTree(serverWorld, serverWorld.getChunkProvider().getChunkGenerator(), pos, state,
-                rand);
+
     }
 
 }

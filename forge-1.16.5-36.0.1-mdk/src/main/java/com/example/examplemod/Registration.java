@@ -9,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,6 +25,7 @@ public class Registration {
     public static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES,ExampleMod.MOD_ID);
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS,ExampleMod.MOD_ID);
     public static final DeferredRegister<IRecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS,ExampleMod.MOD_ID);
+    public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES,ExampleMod.MOD_ID);
 
 
     public static void register() {
@@ -32,10 +35,12 @@ public class Registration {
         TILES.register(modEventBus);
         CONTAINERS.register(modEventBus);
         SERIALIZERS.register(modEventBus);
+        STRUCTURES.register(modEventBus);
 
         ModBlocks.register();
         ModItems.register();
         ModTiles.register();
         ModRecipes.register();
+        ModFeatures.register();
     }
 }
