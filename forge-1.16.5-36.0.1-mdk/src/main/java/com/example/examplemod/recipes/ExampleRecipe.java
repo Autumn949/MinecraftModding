@@ -156,21 +156,7 @@ public class ExampleRecipe implements IExampleRecipe {
         return this.getRecipeOutput().copy();
     }
 
-    public int getWidth() {
-        return this.recipeWidth;
-    }
 
-    public int getRecipeWidth() {
-        return getWidth();
-    }
-
-    public int getHeight() {
-        return this.recipeHeight;
-    }
-
-    public int getRecipeHeight() {
-        return getHeight();
-    }
 
     private static NonNullList<Ingredient> deserializeIngredients(String[] pattern, Map<String, Ingredient> keys, int patternWidth, int patternHeight) {
         NonNullList<Ingredient> nonnulllist = NonNullList.withSize(patternWidth * patternHeight, Ingredient.EMPTY);

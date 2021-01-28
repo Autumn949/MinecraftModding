@@ -1,6 +1,8 @@
 package com.example.examplemod;
 
 import com.example.examplemod.blocks.*;
+import com.example.examplemod.gen.tree.TutorialTree;
+import com.example.examplemod.items.TutorialSapling;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -27,6 +29,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> GEN_BLOCK = register("gen_block",()-> new GeneratorBlock(AbstractBlock.Properties.create(Material.IRON)));
     public static final RegistryObject<Block> GEN_SURVIVAL_BLOCK = register("gen_block_survival",()-> new SurvivalGeneratorBlock());
     public static final RegistryObject<Block> CRAFTING_BLOCK = register("crafting_block", ()->new TutorialCraftingTable(AbstractBlock.Properties.create(Material.IRON)));
+    public static final RegistryObject<Block> TUTORIAL_SAPLING = register("tutorial_sapling",()->new TutorialSapling(TutorialTree::new,AbstractBlock.Properties.create(Material.IRON)));
     static void register() {}
     //RegistersBlock WO Item
     private static <T extends Block> RegistryObject<T> registerNoItem(String name, Supplier<T> block) {
